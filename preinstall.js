@@ -2,7 +2,7 @@ const {exec} = require('child_process')
 const fs = require('fs')
 // update the submodule(s) in this repo
 // please don't remove this file!
-
+exec('git config submodule.recurse true')
 if (fs.existsSync(__dirname + '/gotlib')) {
     // Do something
     console.log(__dirname + '/gotlib already installed')
