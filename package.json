@@ -1,0 +1,22 @@
+{
+  "name": "cloudapps",
+  "version": "1.0.0",
+  "description": "heroku cloud apps, one branch per app please",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/worldmaking/cloudapps.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/worldmaking/cloudapps/issues"
+  },
+  "homepage": "https://github.com/worldmaking/cloudapps#readme",
+  "dependencies": {
+    "ws": "^7.3.1"
+  }
+}
