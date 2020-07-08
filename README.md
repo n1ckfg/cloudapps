@@ -1,10 +1,6 @@
 # cloudapps
 heroku cloud apps, one branch per app please
 
-# branches
+## mischmasch-host
 
-## mischmasch-userdata
-
-```git remote add userdata https://git.heroku.com/mischmasch-userdata```
-
-```git push userdata mischmasch-userdatas:master```
+```git push heroku mischmasch-host:master```
