@@ -5,7 +5,9 @@
   "main": "host.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node host.js"
+    "start": "node host.js",
+    "postinstall": "node postinstall.js",
+    "preinstall": "node preinstall.js"
   },
   "repository": {
     "type": "git",
