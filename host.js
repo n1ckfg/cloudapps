@@ -6,7 +6,7 @@ const fs = require('fs')
 let listenPort = (process.env.PORT || 8081)
 const deltaWebsocketServer = new WebSocket.Server({ 'port': listenPort, clientTracking: true });
 
-const got = require("./got/got")
+const got = require("./gotlib/got.js")
 const { argv } = require('yargs');
 
 // custom keepAlive function to detect and handle broken connections
@@ -53,9 +53,19 @@ let recordStatus = 0
 
   scenefile = JSON.parse(fs.readFileSync(__dirname + "/scene_rich.json"))
   // fs.writeFileSync('simpleGraph.json', JSON.stringify(sceneFile))
-  localGraph = got.graphFromDeltas(scenefile)
+
   //console.log(localGraph)
-	// turn this into deltas:
+  // turn this into deltas:
+  try {
+    //console.log('\n\npreApply', localGraph.nodes.resofilter_120)
+    // got.applyDeltasToGraph(localGraph, msg.data);
+
+    localGraph = got.graphFromDeltas(scenefile)
+    console.log('var localGraph set to file /scene_rich.json', localGraph)
+    //console.log('\n\npostApply', JSON.stringify(localGraph.nodes.resofilter_120.resonance))
+  } catch (e) {
+    console.warn(e);
+  }
 	
 
   //! host also has to run the p2p-mesh signalling server, because heroku only allows one port on the server instance
