@@ -1,10 +1,8 @@
 # cloudapps
 heroku cloud apps, one branch per app please
 
-## Branches:
+# Branch:
 
-### mischmasch-userdata
+## mischmasch-userdata
 
-
-
-### mischmasch-host
+```git push heroku mischmasch-userdata:master```
