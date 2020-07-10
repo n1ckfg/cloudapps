@@ -28,7 +28,7 @@
             "pulse":{"_props":{"kind":"outlet", "index": 2}}
         },
         "ffmvco_1":{
-            "_props":{"kind":"ffmvco","pos": [0.0, -2.85, 0.2], "orient": [-0.382683, 0.0, 0.0, 0.92388] },
+            "_props":{"kind":"ffmvco","pos": [0.0, 0.85, -1.2], "orient": [-0.382683, 0.0, 0.0, 0.92388] },
             "vco_1_cv":{"_props":{"kind":"inlet"}},
             "index_cv":{"_props":{"kind":"inlet"}},
             "vco_2_cv":{"_props":{"kind":"inlet"}},
