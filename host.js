@@ -65,15 +65,14 @@ let localGraph = {
 	arcs: []
 }
 
+loadScene('scene_rich.json')
+
 let recordStatus = 0
 // http.listen(listenPort, function(){
 //   // console.log('listening on ' + listenPort);
 // })
 
-  localGraph = JSON.parse(fs.readFileSync(__dirname + "/scenes/scene_rich.json"))
-  // fs.writeFileSync('simpleGraph.json', JSON.stringify(sceneFile))
-  console.log('var localGraph set to file /scenes/scene_rich.json', localGraph)
-	
+
 
   // const p2pSignalBroker = require('coven/server');
   // const DEFAULT_PORT = 8082; 
@@ -237,14 +236,23 @@ let recordStatus = 0
       break
 
       case "loadScene":
-
-        let deltas = got.deltasFromGraph(localGraph, []);
-        let msg = JSON.stringify({
+        // first clear scene:
+       let clearMsg = JSON.stringify({
           cmd:'deltas',
           date: Date.now(),
-          data: deltas
+          data: clearScene()
         })
-        deltaWebsocket.send(msg)
+        send_all_clients(clearMsg)
+
+        // then load the requested scene
+
+        let sceneMsg = JSON.stringify({
+          cmd:'deltas',
+          date: Date.now(),
+          data: loadScene(msg.data)
+        })
+        send_all_clients(sceneMsg)
+
       break
 
       
@@ -450,6 +458,22 @@ function send_all_clients(msg, ignore) {
 	});
 }
 
+
+function clearScene(){
+  let deltas = got.deltasFromGraph(localGraph, []);
+  let inverse = got.inverseDelta(deltas)
+  localGraph = got.applyDeltasToGraph(localGraph, inverse)
+  return inverse
+}
+
+function loadScene(sceneName){
+
+  localGraph = JSON.parse(fs.readFileSync(__dirname + "/scenes/" + sceneName))
+// fs.writeFileSync('simpleGraph.json', JSON.stringify(sceneFile))
+  console.log('var localGraph set to file /scenes/scene_rich.json', localGraph)
+  let deltas = got.deltasFromGraph(localGraph, []);
+  return deltas
+}
 
 // const createSignalingBroker = require('coven/server');
 // const DEFAULT_PORT = 8082;
