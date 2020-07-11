@@ -9,6 +9,25 @@ const deltaWebsocketServer = new WebSocket.Server({ 'port': listenPort, clientTr
 const got = require("./gotlib/got.js")
 const { argv } = require('yargs');
 
+// const enumerateFiles = require('enumerate-files');
+
+// (async () => {
+//   const files = await enumerateFiles('./scenes');
+//   /* Set {
+//     '/Users/example/node_modules/LICENSE',
+//     '/Users/example/node_modules/README.md',
+//     '/Users/example/node_modules/index.js',
+//     '/Users/example/node_modules/package.json'
+//   } */
+//   console.log(files.Set)
+// })();
+let sceneFiles = []
+fs.readdirSync('./scenes').forEach(file => {
+  sceneFiles.push(file)
+});
+console.log(sceneFiles)
+
+
 // custom keepAlive function to detect and handle broken connections
 
 // function noop() {}
@@ -51,13 +70,13 @@ let recordStatus = 0
 //   // console.log('listening on ' + listenPort);
 // })
 
-  localGraph = JSON.parse(fs.readFileSync(__dirname + "/scene_rich.json"))
+  localGraph = JSON.parse(fs.readFileSync(__dirname + "/scenes/scene_rich.json"))
   // fs.writeFileSync('simpleGraph.json', JSON.stringify(sceneFile))
-  console.log('var localGraph set to file /scene_rich.json', localGraph)
+  console.log('var localGraph set to file /scenes/scene_rich.json', localGraph)
 	
 
   // const p2pSignalBroker = require('coven/server');
-  // const DEFAULT_PORT = 8082;
+  // const DEFAULT_PORT = 8082; 
   // const PORT = +(process.env.PORT || DEFAULT_PORT);
  
   // p2pSignalBroker({
@@ -83,6 +102,13 @@ let recordStatus = 0
     let source;
 
     
+    let sceneListMsg = JSON.stringify({
+      cmd:'sceneList',
+      date: Date.now(),
+      data: sceneFiles
+    })
+    deltaWebsocket.send(sceneListMsg)
+
     let deltas = got.deltasFromGraph(localGraph, []);
     let msg = JSON.stringify({
       cmd:'deltas',
@@ -209,6 +235,19 @@ let recordStatus = 0
 
 
       break
+
+      case "loadScene":
+
+        let deltas = got.deltasFromGraph(localGraph, []);
+        let msg = JSON.stringify({
+          cmd:'deltas',
+          date: Date.now(),
+          data: deltas
+        })
+        deltaWebsocket.send(msg)
+      break
+
+      
   
       // case "playback":{
       // 	//console.log(msg)/
