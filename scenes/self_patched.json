@@ -75,7 +75,7 @@
         ["lfo_2.saw","vca_1.signal"],
         ["lfo_1.sine","vca_1.cv"],
         ["vca_1.output","dualvco_1.rate_1_cv"],
-        ["vca_1.output","dualvco_1.period_cv"],
+        ["vca_1.output","pulsars_1.period_cv"],
         ["dualvco_1.output","pulsars_1.signal"],
         ["pulsars_1.output","speaker_1.input"],
         ["pulsars_1.output","lfo_2.fm_cv"]
