@@ -8,7 +8,7 @@ const deltaWebsocketServer = new WebSocket.Server({ 'port': listenPort, clientTr
 
 const got = require("./gotlib/got.js")
 const { argv } = require('yargs');
-let strangelove = JSON.parse(fs.readFileSync('./strangelove.json'))
+let quotes = JSON.parse(fs.readFileSync('./strangelove.json'))
 
 // const enumerateFiles = require('enumerate-files');
 
@@ -271,11 +271,11 @@ let recordStatus = 0
 
       case "nuclearOption":
         // close all this client's connection
-        strangelove = strangelove[strangelove.length * Math.random() | 0]
+        let quote = quotes.sort(function() {return 0.5 - Math.random()})[0]
         msg = JSON.stringify({
           cmd:'nuclearOption',
           date: Date.now(),
-          data: strangelove
+          data: quote
         })
         deltaWebsocket.send(msg)
         
@@ -509,4 +509,6 @@ function loadScene(sceneName){
 //     console.log(`[${room}::${type}] ${origin} -> ${target || '<BROADCAST>'}`);
 //   },
 // });
+
+
 
