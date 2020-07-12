@@ -3,6 +3,7 @@
 		"lfo_1": {
 			"_props": {
 				"kind": "lfo",
+				"category":"abstraction",
 				"pos": [
 					-0.9066020836065066,
 					1.780897835829367,

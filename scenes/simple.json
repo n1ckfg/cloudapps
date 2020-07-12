@@ -48,7 +48,7 @@
             "master":{"_props":{"kind":"outlet","index":2}}
         },
         "vca_1":{
-            "_props":{"kind":"vca","pos": [0.5, 1.8, -1.0], "orient": [0.25, -0.25, 0.066987, 0.933013] },
+            "_props":{"kind":"vca","category":"abstraction","pos": [0.5, 1.8, -1.0], "orient": [0.25, -0.25, 0.066987, 0.933013] },
             "signal":{"_props":{"kind":"inlet"}},
             "cv":{"_props":{"kind":"inlet"}},
             "cv_amount":{"_props":{"kind":"large_knob","range":[0,1],"taper":"linear","value":0.5,"unit":"float"}},
