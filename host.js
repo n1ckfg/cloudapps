@@ -98,7 +98,8 @@ let recordStatus = 0
   // })
   // sendAllLocalClients(configp2p)
   // whenever a pal connects to this websocket:
-  deltaWebsocketServer.on('connection', function(deltaWebsocket, req) {
+  deltaWebsocketServer.on('connection', function(ws, req) {
+    deltaWebsocket = ws
     let source;
 
     
