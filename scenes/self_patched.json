@@ -49,8 +49,8 @@
         },
         "vca_1":{
             "_props":{"kind":"vca","category":"abstraction","pos": [0.5, 1.8, -1.0], "orient": [0.25, -0.25, 0.066987, 0.933013] },
-            "signal":{"_props":{"kind":"inlet"}},
-            "cv":{"_props":{"kind":"inlet"}},
+            "signal":{"_props":{"kind":"inlet","index":0}},
+            "cv":{"_props":{"kind":"inlet","index":1}},
             "cv_amount":{"_props":{"kind":"large_knob","range":[0,1],"taper":"linear","value":0.5,"unit":"float"}},
             "bias":{"_props":{"kind":"large_knob","range":[0,1],"taper":"linear","value":0.5,"unit":"float"}},
             "output":{"_props":{"kind":"outlet", "index": 0}}
@@ -62,7 +62,7 @@
             "period_cv":{"_props":{"kind":"inlet","index":1}},
             "formant":{"_props":{"kind":"large_knob","range":[0,1000],"taper":"log 3.8","value":0.25,"unit":"float"}},
             "formant_cv":{"_props":{"kind":"inlet","index":2}},
-            "hipass":{"_props":{"kind":"outlet","index":0}}
+            "output":{"_props":{"kind":"outlet","index":0}}
           
         },
         "speaker_1":{
@@ -76,8 +76,8 @@
         ["lfo_1.sine","vca_1.cv"],
         ["vca_1.output","dualvco_1.rate_1_cv"],
         ["vca_1.output","pulsars_1.period_cv"],
-        ["dualvco_1.output","pulsars_1.signal"],
+        ["dualvco_1.master","pulsars_1.signal"],
         ["pulsars_1.output","speaker_1.input"],
-        ["pulsars_1.output","lfo_2.fm_cv"]
+        ["pulsars_1.output","pulsars_1.formant_cv"]
     ]
 }
