@@ -265,6 +265,11 @@ let recordStatus = 0
         send_all_clients(msg)
 
       break;
+
+      case "nuclearOption":
+        // close all this client's connection
+        deltaWebsocketServer.close()
+      break
   
       // case "playback":{
       // 	//console.log(msg)/
@@ -494,3 +499,6 @@ function loadScene(sceneName){
 //     console.log(`[${room}::${type}] ${origin} -> ${target || '<BROADCAST>'}`);
 //   },
 // });
+
+let strangelove = JSON.parse(fs.readFileSync('./strangelove.json'))
+let nuclearCounter = 0
