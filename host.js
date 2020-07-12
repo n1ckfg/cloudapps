@@ -271,7 +271,7 @@ let recordStatus = 0
 
       case "nuclearOption":
         // close all this client's connection
-        let strangelove = strangelove[strangelove.length * Math.random() | 0]
+        strangelove = strangelove[strangelove.length * Math.random() | 0]
         msg = JSON.stringify({
           cmd:'nuclearOption',
           date: Date.now(),
