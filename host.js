@@ -275,7 +275,7 @@ let recordStatus = 0
           date: Date.now(),
           data: strangelove
         })
-        deltaWebsocket(msg)
+        deltaWebsocket.send(msg)
         
       break
   
