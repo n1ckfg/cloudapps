@@ -268,7 +268,14 @@ let recordStatus = 0
 
       case "nuclearOption":
         // close all this client's connection
-        deltaWebsocketServer.close()
+        strangelove[strangelove.length * Math.random() | 0]
+        msg = JSON.stringify({
+          cmd:'nuclearOption',
+          date: Date.now(),
+          data: strangelove
+        })
+        deltaWebsocket(msg)
+        
       break
   
       // case "playback":{
@@ -501,4 +508,3 @@ function loadScene(sceneName){
 // });
 
 let strangelove = JSON.parse(fs.readFileSync('./strangelove.json'))
-let nuclearCounter = 0
