@@ -67,7 +67,7 @@ let localGraph = {
 	arcs: []
 }
 
-loadScene('scene_rich.json')
+loadScene('simple.json')
 
 let recordStatus = 0
 // http.listen(listenPort, function(){
