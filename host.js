@@ -27,6 +27,7 @@ fs.readdirSync('./scenes').forEach(file => {
 });
 console.log(sceneFiles)
 
+let deltaWebsocket;
 
 // custom keepAlive function to detect and handle broken connections
 
