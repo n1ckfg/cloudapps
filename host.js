@@ -8,6 +8,7 @@ const deltaWebsocketServer = new WebSocket.Server({ 'port': listenPort, clientTr
 
 const got = require("./gotlib/got.js")
 const { argv } = require('yargs');
+let strangelove = JSON.parse(fs.readFileSync('./strangelove.json'))
 
 // const enumerateFiles = require('enumerate-files');
 
@@ -509,4 +510,3 @@ function loadScene(sceneName){
 //   },
 // });
 
-let strangelove = JSON.parse(fs.readFileSync('./strangelove.json'))
