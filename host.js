@@ -256,17 +256,15 @@ let recordStatus = 0
       break
 
       case "clearScene":
-        // first clear scene:
-       msg = JSON.stringify({
+
+        msg = JSON.stringify({
           cmd:'deltas',
           date: Date.now(),
           data: clearScene()
         })
         send_all_clients(msg)
 
-      break
-
-      
+      break;
   
       // case "playback":{
       // 	//console.log(msg)/
