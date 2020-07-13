@@ -262,8 +262,6 @@ let recordStatus = 0
         console.log('writing file ', msg.data, typeof msg.data)
         fs.writeFileSync('./scenes/' + msg.data, JSON.stringify(localGraph))
 
-        sceneFiles.push(msg.data)
-
         sceneFiles.length = 0
         fs.readdirSync('./scenes').forEach(file => {
           sceneFiles.push(file)
@@ -274,6 +272,31 @@ let recordStatus = 0
           data: sceneFiles
         })
         send_all_clients(sceneUpdate)
+      break
+
+      case "deleteScene":
+        if (!msg.data || msg.data === '' || msg.data === undefined){
+          
+          // basically want to prevent just the scenes folder from being removed...
+        } else {
+          let deletePath = './scenes/' + msg.data
+          fs.unlink(deletePath, (err) => {
+            if (err) {
+              console.error(err)
+              return
+            }
+            sceneFiles.length = 0
+            fs.readdirSync('./scenes').forEach(file => {
+              sceneFiles.push(file)
+            });
+            sceneUpdate = JSON.stringify({
+              cmd: 'sceneList',
+              date: Date.now(),
+              data: sceneFiles
+            })
+            send_all_clients(sceneUpdate)
+          })
+        }
       break
 
       case "clearScene":
