@@ -263,13 +263,17 @@ let recordStatus = 0
         fs.writeFileSync('./scenes/' + msg.data, JSON.stringify(localGraph))
 
         sceneFiles.push(msg.data)
+
+        sceneFiles.length = 0
+        fs.readdirSync('./scenes').forEach(file => {
+          sceneFiles.push(file)
+        });
         sceneUpdate = JSON.stringify({
           cmd: 'sceneList',
           date: Date.now(),
           data: sceneFiles
         })
         send_all_clients(sceneUpdate)
-        console.log(msg.data)
       break
 
       case "clearScene":
