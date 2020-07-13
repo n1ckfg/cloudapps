@@ -276,7 +276,7 @@ let recordStatus = 0
 
       case "deleteScene":
         if (!msg.data || msg.data === '' || msg.data === undefined){
-          
+          // test
           // basically want to prevent just the scenes folder from being removed...
         } else {
           let deletePath = './scenes/' + msg.data
