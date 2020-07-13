@@ -263,7 +263,7 @@ let recordStatus = 0
         // fs.writeFileSync(msg.data, JSON.stringify(localGraph))
 
         sceneFiles.push(msg.data)
-        JSON.stringify({
+        let msg = JSON.stringify({
           cmd: 'sceneList',
           date: Date.now(),
           data: sceneFiles
