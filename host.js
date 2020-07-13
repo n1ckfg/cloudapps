@@ -258,6 +258,18 @@ let recordStatus = 0
 
       break
 
+      case "saveScene":
+        fs.writeFileSync(msg.data, JSON.stringify(localGraph))
+
+        sceneFiles.push(msg.data)
+        JSON.stringify({
+          cmd: 'sceneList',
+          date: Date.now(),
+          data: sceneFiles
+        })
+        send_all_clients(msg)
+      break
+
       case "clearScene":
 
         msg = JSON.stringify({
