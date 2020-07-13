@@ -260,7 +260,7 @@ let recordStatus = 0
 
       case "saveScene":
         console.log('writing file ', msg.data, typeof msg.data)
-        // fs.writeFileSync(msg.data, JSON.stringify(localGraph))
+        fs.writeFileSync('./scenes/' + msg.data, JSON.stringify(localGraph))
 
         sceneFiles.push(msg.data)
         sceneUpdate = JSON.stringify({
