@@ -263,12 +263,12 @@ let recordStatus = 0
         // fs.writeFileSync(msg.data, JSON.stringify(localGraph))
 
         sceneFiles.push(msg.data)
-        let msg = JSON.stringify({
+        sceneUpdate = JSON.stringify({
           cmd: 'sceneList',
           date: Date.now(),
           data: sceneFiles
         })
-        send_all_clients(msg)
+        send_all_clients(sceneUpdate)
         console.log(msg.data)
       break
 
