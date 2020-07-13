@@ -259,7 +259,8 @@ let recordStatus = 0
       break
 
       case "saveScene":
-        fs.writeFileSync(msg.data, JSON.stringify(localGraph))
+        console.log('writing file ', msg.data, typeof msg.data)
+        // fs.writeFileSync(msg.data, JSON.stringify(localGraph))
 
         sceneFiles.push(msg.data)
         JSON.stringify({
@@ -268,6 +269,7 @@ let recordStatus = 0
           data: sceneFiles
         })
         send_all_clients(msg)
+        console.log(msg.data)
       break
 
       case "clearScene":
