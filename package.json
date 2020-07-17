@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/worldmaking/mischmasch-host#readme",
   "dependencies": {
+    "array-equal": "^1.0.0",
     "ws": "^7.3.0",
     "yargs": "^15.4.0"
   }
