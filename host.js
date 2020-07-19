@@ -165,7 +165,7 @@ let recordStatus = 0
 
       } else {
         try {
-          handlemessage(JSON.parse(e), id);
+          handlemessage(JSON.parse(e), deltaWebsocket);
           
         } catch (e) {
           console.log('bad JSON: ', e);
@@ -176,7 +176,7 @@ let recordStatus = 0
   });
 
 
-  function handlemessage(msg, id) {
+  function handlemessage(msg, deltaWebsocket) {
 
     switch (msg.cmd) {
 
@@ -229,8 +229,8 @@ let recordStatus = 0
 
 			//OTHistory.push(JSON.stringify(response))
 			console.log('localgraph',localGraph, '\n')
-			send_all_clients(JSON.stringify(response));
-
+			// send_all_clients(JSON.stringify(response));
+      send_all_clients(JSON.stringify(response), deltaWebsocket)
       } break;
 
       case "fromTeaparty":
@@ -321,191 +321,7 @@ let recordStatus = 0
         deltaWebsocket.send(msg)
         
       break
-  
-      // case "playback":{
-      // 	//console.log(msg)/
-      // 	console.log(msg.data)
-      // 	/*
-      // 	let response = {
-      // 		cmd: "deltas",
-      // 		date: Date.now(),
-      // 		data: msg.data
-      // 	};
-      // 	// NOTE: this is copied from the deltas case, but i've commented out recording the playback since for now it'd just be redundant. 
-      // 	// we might, though, at some point want to record when a playback occurred, and note when playback was stopped/looped/overdubbed/etc
-      // 	//recordJSON.push(response)
-      // 	//fs.writeFileSync(sessionRecording, JSON.stringify(recordJSON, null, "  "), "utf-8")
-      // 	send_all_clients(JSON.stringify(response));
-      // 	*/
-      // } break;
-  
-      // case "initController":{
-  
-      //   // the max patch "control.maxpat" will request the current available sessions & scene files from the server:
-  
-      //   // get recorded sessions
-      //   function fromDir(startPath,filter,callback){		
-      //     if (!fs.existsSync(startPath)){
-      //         console.log("no dir ",startPath);
-      //         return;
-      //     }
-      //     var files=fs.readdirSync(startPath);
-      //     for (var i=0;i<files.length;i++){
-      //       var filename=path.join(startPath,files[i]);
-      //       var stat = fs.lstatSync(filename);
-      //       if (stat.isDirectory()){
-      //           fromDir(filename,filter,callback); //recurse
-      //       } else if (filter.test(filename)) callback(filename);
-      //     };
-      //   };
-      
-      //   fromDir(__dirname + '/session_recordings',/\.json$/,function(filename){
-      //     filename = filename.split('\\').pop().split('/').pop();
-      //     filesFound = {
-      //       cmd: "sessionRecordings",
-      //       date: Date.now(),
-      //       data: filename
-      //     };
-      //     send_all_clients(JSON.stringify(filesFound));
-      //   });
-  
-      //   // get scene files
-      //   function fromDir(startPath,filter,callback){		
-      //     if (!fs.existsSync(startPath)){
-      //         console.log("no dir ",startPath);
-      //         return;
-      //     }
-      //     var files=fs.readdirSync(startPath);
-      //     for (var i=0;i<files.length;i++){
-      //       var filename=path.join(startPath,files[i]);
-      //       var stat = fs.lstatSync(filename);
-      //       if (stat.isDirectory()){
-      //           fromDir(filename,filter,callback); //recurse
-      //       } else if (filter.test(filename)) callback(filename);
-      //     };
-      //   };
-      
-      //   fromDir(__dirname + '/scene_files',/\.json$/,function(filename){
-      //     filename = filename.split('\\').pop().split('/').pop();
-      //     filesFound = {
-      //       cmd: "scene_files",
-      //       date: Date.now(),
-      //       data: filename
-      //     };
-      //     send_all_clients(JSON.stringify(filesFound));
-      //   });
-      // } break;
-  
-      // case "record":{
-      // 	// reset session
-  
-      // 	// take OTHistory, turn it into a graph. 
-      // 	// take that graph turn it back into an OT history (will this remove all redundant deltas? (we want this...))
-      // 	// set these deltas as the header for the recorded session file
-      // 	// then append the recordJSON in the stopRecord section.
-      // 	//let header = {}
-  
-      // 	// header['header'] = localGraph
-      // 	// console.log(header)
-        
-      // 	recordJSON = {
-      // 		header:{
-      // 			scene: localGraph,
-      // 			timestamp: Date.now()
-      // 		},
-      // 		deltas:[]
-          
-      // 	}
-      // 	// recordJSON.push(header)
-      // 	let recording = msg.data.replace(/\s/g, "_")
-      // 	// save session name as filename provided in this message
-      // 	sessionRecording = __dirname + "/session_recordings/" + recording + ".json"
-      // 	// push all received deltas to the recordJSON:
-      // 	recordStatus = 1
-      // 	console.log('session will be stored at', sessionRecording)
-        
-      // } break;
-  
-      // case "stopRecord":{
-      // 	recordStatus = 0
-  
-        
-      // 	fs.writeFileSync(sessionRecording, JSON.stringify(recordJSON, null, 2), "utf-8")
-        
-      // 	console.log('session saved at', sessionRecording)
-  
-      // } break;
-  
-      // case "clear_scene": {
-      // 	// JSON not streamable format so close out the history file 
-      // 	//fs.appendFileSync(OTHistoryFile, ']', "utf-8")
-  
-      // 	let deltas = load_scene("scene_speaker.json")
-      // 	// create new history file & add scene as header
-      // 	//OTHistoryFile = '../histories/OT_' + Date.now() + '.json'
-      // 	// let header = {}
-      // 	// header['header'] = deltas
-      // 	//fs.writeFileSync(OTHistoryFile, '[' + JSON.stringify(header), "utf-8")
-      // } break;
-      // case "get_scene": {
-        
-      //   //demo_scene = JSON.parse(fs.readFileSync(scenefile, "utf-8")); 
-      //   // turn this into deltas:
-      //   let deltas = got.deltasFromGraph(localGraph, []);
-      //   //console.log(deltas)
-  
-      //   // reply only to the requester:
-      //   sock.send(JSON.stringify({
-      //     cmd: "deltas",
-      //     date: Date.now(),
-      //     data: deltas //OTHistory
-      //   }));
-  
-      // } break;
-      // case "updated_scene": {
-      //   // // Example sending some greetings:
-  
-      //   // ensure the blank scene isn't overwritten
-      //   ensureBlank = __dirname + '/scene_files/blank_scene.json'
-      //   if (scenefile === ensureBlank){
-      //     console.log('writing to blank scene prevented')
-      //   } else {
-      //     let scenestr = JSON.stringify(msg.scene, null, "\t");
-      //     fs.writeFileSync(scenefile, scenestr, "utf-8");
-      //     //console.log(scenestr)
-      //   }
-  
-      // } break;
-  
-      // case "loadScene": {
-      //   load_scene(msg.data);
-      // } break;
-  
-      // case "user_pose": {
-      //   //console.log(JSON.stringify(msg.pose))
-      //   // broadcast this data... 
-  
-      //   recordPose = {
-      //     cmd: "user_pose",
-      //     date: Date.now(),
-      //     pose: msg.pose
-      //   }
-      //   let poseDelta = JSON.stringify(recordPose)
-      //   send_all_clients(poseDelta);
-  
-      //   const limiter = new bottleneck({
-      //     maxConcurrent: 1,
-      //     minTime: 30
-      //   });
-  
-  
-      //   // Limit storing of pose data to rate of 30fps
-      //   limiter.schedule(() => {
-      //     //OTHistory.push(poseDelta)
-      //     //fs.appendFileSync(OTHistoryFile, ',' + JSON.stringify(recordPose), "utf-8")
-  
-      //   });
-      // } break;
+
       default: console.log("received JSON", msg, typeof msg);
     }
   }
@@ -523,6 +339,17 @@ function send_all_clients(msg, ignore) {
 	});
 }
 
+// send to all clients EXCEPT for the one specified at ignore
+function send_to_other_clients(msg, ignore) {
+	deltaWebsocketServer.clients.forEach(function each(client) {
+		if (client == ignore) return;
+		try {
+			client.send(msg);
+		} catch (e) {
+			console.error(e);
+		};
+	});
+}
 
 function clearScene(){
   let deltas = got.deltasFromGraph(localGraph, []);

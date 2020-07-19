@@ -80,7 +80,7 @@ function visit(node){
        
         visited[node] = true
         let nodeName = nodes[node]
-        
+        console.log(nodeName)
         // console.log(nodeName, visited)
         if(adjacents[nodeName].length===0){
             // likely skip... this node has no adjacent nodes
