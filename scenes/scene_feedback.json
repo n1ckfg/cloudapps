@@ -516,7 +516,7 @@
         "_props": {
           "kind": "inlet",
           "index": 0,
-          "history": false
+          "history": "no"
         }
       }
     }
