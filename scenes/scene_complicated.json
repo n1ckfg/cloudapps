@@ -106,7 +106,7 @@
         "_props": {
           "kind": "outlet",
           "index": 0,
-          "history": false
+          "history": "no"
         }
       }
     },
@@ -177,7 +177,7 @@
         "_props": {
           "kind": "outlet",
           "index": 0,
-          "history": false
+          "history": "no"
         }
       }
     },
@@ -246,7 +246,7 @@
         "_props": {
           "kind": "outlet",
           "index": 0,
-          "history": false
+          "history": "no"
         }
       }
     },
@@ -283,7 +283,7 @@
         "_props": {
           "kind": "outlet",
           "index": 0,
-          "history": false
+          "history": "no"
         }
       }
     },
