@@ -9,7 +9,6 @@ const deltaWebsocketServer = new WebSocket.Server({ 'port': listenPort, clientTr
 const got = require("./gotlib/got.js")
 const { argv } = require('yargs');
 let quotes = JSON.parse(fs.readFileSync('./strangelove.json'))
-const fb = require('./historify.js')
 
 // const enumerateFiles = require('enumerate-files');
 
@@ -249,8 +248,13 @@ let recordStatus = 0
         send_all_clients(clearMsg)
 
         // then load the requested scene
-        loadScene(msg.data)
 
+        let sceneMsg = JSON.stringify({
+          cmd:'deltas',
+          date: Date.now(),
+          data: loadScene(msg.data)
+        })
+        send_all_clients(sceneMsg)
 
       break
 
@@ -358,34 +362,9 @@ function loadScene(sceneName){
 
   localGraph = JSON.parse(fs.readFileSync(__dirname + "/scenes/" + sceneName))
 // fs.writeFileSync('simpleGraph.json', JSON.stringify(sceneFile))
-  console.log('var localGraph set to file /scenes/scene_rich.json', localGraph)
+  console.log('var localGraph set to file /scenes/' + sceneName, localGraph)
   let deltas = got.deltasFromGraph(localGraph, []);
-
-  // feedback path stuff
-  for(i=0;i<deltas.length; i++){
-    // if a connection delta, check if history node is needed: 
-    if(deltas[i].op === 'connect'){
-      let historyDelta = getHistoryPropchanges(deltas[i])
-      let msg = JSON.stringify({
-        cmd: 'deltas',
-        date: Date.now(),
-        data: historyDelta
-      })
-      send_all_clients(msg)
-      
-    }
-    else {
-      let msg = JSON.stringify({
-        cmd: 'deltas',
-        date: Date.now(),
-        data: deltas
-      })
-
-      send_all_clients(msg)
-      
-    }
-  } 
-  
+  return deltas
 }
 
 // const createSignalingBroker = require('coven/server');
@@ -401,39 +380,3 @@ function loadScene(sceneName){
 
 
 
-function getHistoryPropchanges(d){
-  // 'd' is a connection delta received from either the host or the 
-  // get list of child nodes in graph
-  let nodes = fb.setup(localGraph)
-
-  // get list of adjacent nodes per each node in the graph
-  let adjacents = fb.getAdjacents(0, nodes, localGraph)
-
-  // reset the nodes array with list of only parent nodes whose child nodes have adjacent connections:
-  nodes.length = 0
-  nodes = Object.keys(adjacents)
-  nodeCount = nodes.length
-  // get 
-  let historyPropchange = fb.visit(0, nodes, adjacents, localGraph, nodeCount)
-  let propchanges = []
-  for(i=0;i<historyPropchange.length;i++){
-    if(historyPropchange[i].includes(d.paths[0]) === true && historyPropchange[i].includes(d.paths[1]) === true){
-      let srcPath = d.paths[0]
-      let parent = srcPath.split('.')[0]
-      let child = srcPath.split('.')[1]
-      console.log(srcPath)
-      propchange = [ { 
-        op: 'propchange',
-        path: srcPath,
-        name: 'history',
-        from: localGraph.nodes[parent][child]._props.history,
-        to: true 
-      } ]
-      propchanges.push(propchange)
-    }
-  }
-  got.applyDeltasToGraph(localGraph, propchanges)
-  // append the connection delta to the msg
-  propchanges.push(d)
-  return propchanges
-}
