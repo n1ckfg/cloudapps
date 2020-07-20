@@ -19,7 +19,7 @@
         "_props": {
           "kind": "outlet",
           "index": 0,
-          "history": "no"
+          "history": false
         }
       }
     },
