@@ -365,7 +365,6 @@ function loadScene(sceneName){
   for(i=0;i<deltas.length; i++){
     // if a connection delta, check if history node is needed: 
     if(deltas[i].op === 'connect'){
-      console.log(deltas[i])
       let historyDelta = getHistoryPropchanges(deltas[i])
       let msg = JSON.stringify({
         cmd: 'deltas',
