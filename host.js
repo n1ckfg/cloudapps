@@ -372,8 +372,8 @@ function loadScene(sceneName){
         date: Date.now(),
         data: historyDelta
       })
-      sendAllLocalClients(msg)
-      deltaWebsocket.send(msg)
+      send_all_clients(msg)
+      
     }
     else {
       let msg = JSON.stringify({
