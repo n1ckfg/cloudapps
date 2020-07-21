@@ -205,14 +205,12 @@ let recordStatus = 0
 			}
 
 			//console.log(msg.data)
-			// TODO: merge OTs
 			
 			let response = {
 				cmd: "deltas",
 				date: Date.now(),
 				data: msg.data
 			};
-			console.log(msg.data)
 			
 			// check if the recording status is active, if so push received delta(s) to the recordJSON
 			if (recordStatus === 1){
@@ -228,9 +226,9 @@ let recordStatus = 0
 			//fs.appendFileSync(OTHistoryFile, ',' + JSON.stringify(response), "utf-8")
 
 			//OTHistory.push(JSON.stringify(response))
-			console.log('localgraph',localGraph, '\n')
+			
 			// send_all_clients(JSON.stringify(response));
-      send_all_clients(JSON.stringify(response), deltaWebsocket)
+      send_to_other_clients(JSON.stringify(response), deltaWebsocket)
       } break;
 
       case "fromTeaparty":
@@ -328,9 +326,8 @@ let recordStatus = 0
 
 
   // send a (string) message to all connected clients:
-function send_all_clients(msg, ignore) {
+function send_all_clients(msg) {
 	deltaWebsocketServer.clients.forEach(function each(client) {
-		if (client == ignore) return;
 		try {
 			client.send(msg);
 		} catch (e) {
@@ -342,7 +339,9 @@ function send_all_clients(msg, ignore) {
 // send to all clients EXCEPT for the one specified at ignore
 function send_to_other_clients(msg, ignore) {
 	deltaWebsocketServer.clients.forEach(function each(client) {
-		if (client == ignore) return;
+		if (client == ignore) {
+      return
+    }
 		try {
 			client.send(msg);
 		} catch (e) {
