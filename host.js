@@ -28,7 +28,7 @@ fs.readdirSync('./scenes').forEach(file => {
 });
 console.log(sceneFiles)
 
-let deltaWebsocket;
+// let deltaWebsocket;
 
 // custom keepAlive function to detect and handle broken connections
 
@@ -165,7 +165,7 @@ let recordStatus = 0
 
       } else {
         try {
-          handlemessage(JSON.parse(e), deltaWebsocket);
+          handlemessage(JSON.parse(e), ws);
           
         } catch (e) {
           console.log('bad JSON: ', e);
