@@ -67,6 +67,10 @@ let localGraph = {
 	arcs: []
 }
 
+function storeSession(){
+  fs.writeFileSync('./scenes/sessionFile.json', JSON.stringify(localGraph, null, '\t'))
+}
+storeSession()
 loadScene('scene_feedback.json')
 
 let recordStatus = 0
@@ -196,43 +200,30 @@ let recordStatus = 0
         // runGOT(id, msg.data)
 
         // synchronize our local copy:
-			try {
-				//console.log('\n\npreApply', localGraph.nodes.resofilter_120)
-				got.applyDeltasToGraph(localGraph, msg.data);
-				//console.log('\n\npostApply', JSON.stringify(localGraph.nodes.resofilter_120.resonance))
-			} catch (e) {
-				console.warn(e);
-			}
-
-			//console.log(msg.data)
-			
-			let response = {
-				cmd: "deltas",
-				date: Date.now(),
-				data: msg.data
-			};
-			
-			// check if the recording status is active, if so push received delta(s) to the recordJSON
-			if (recordStatus === 1){
-				
-				for(i = 0; i < msg.data.length; i++){
-					
-					msg.data[i]["timestamp"] = Date.now()
-					recordJSON.deltas.push(msg.data[i])
-				}
-				
-			}
-
-			//fs.appendFileSync(OTHistoryFile, ',' + JSON.stringify(response), "utf-8")
-
-			//OTHistory.push(JSON.stringify(response))
-			
-			// send_all_clients(JSON.stringify(response));
-      send_to_other_clients(JSON.stringify(response), deltaWebsocket)
-      } break;
+        try {
+          got.applyDeltasToGraph(localGraph, msg.data);
+        } catch (e) {
+          console.warn(e);
+        }
+        // store current session to the sessionFile
+        storeSession()
+        let response = {
+          cmd: "deltas",
+          date: Date.now(),
+          data: msg.data
+        };
+        // check if the recording status is active, if so push received delta(s) to the recordJSON
+        if (recordStatus === 1){        
+          for(i = 0; i < msg.data.length; i++){           
+            msg.data[i]["timestamp"] = Date.now()
+            recordJSON.deltas.push(msg.data[i])
+          }    
+        }
+        send_to_other_clients(JSON.stringify(response), deltaWebsocket)
+      } 
+      break;
 
       case "fromTeaparty":
-
 
       break
 
@@ -245,8 +236,7 @@ let recordStatus = 0
         })
         send_all_clients(clearMsg)
 
-        // then load the requested scene
-
+        // then load & send the requested scene as list of deltas
         let sceneMsg = JSON.stringify({
           cmd:'deltas',
           date: Date.now(),
@@ -309,7 +299,7 @@ let recordStatus = 0
       break;
 
       case "nuclearOption":
-        // close all this client's connection
+        // close this client's connection
         let quote = quotes.sort(function() {return 0.5 - Math.random()})[0]
         msg = JSON.stringify({
           cmd:'nuclearOption',
