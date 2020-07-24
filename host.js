@@ -28,6 +28,17 @@ setInterval(() => {
 }, 3000);
 
 
+setInterval(() => {
+  deltaWebsocketServer.clients.forEach((client) => {
+    client.send(JSON.stringify({
+      cmd: 'keyFrame',
+      data: localGraph,
+      date: Date.now() 
+    }))
+  });
+}, 20000);
+
+
 // a local copy of the current graph state, for synchronization purposes
 let localGraph = {
 	nodes: {},
