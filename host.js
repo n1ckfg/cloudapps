@@ -145,30 +145,53 @@ function handlemessage(msg, deltaWebsocket) {
 
 
     case "deltas": {
-      
+      let attempt
       // runGOT(id, msg.data)
 
       // synchronize our local copy:
       try {
-        got.applyDeltasToGraph(localGraph, msg.data);
+
+        attempt = got.applyDeltasToGraph(localGraph, deltaMsg.data);
+
+        
       } catch (e) {
         console.warn(e);
       }
-      // store current session to the sessionFile
-      storeSession()
-      let response = {
-        cmd: "deltas",
-        date: Date.now(),
-        data: msg.data
-      };
-      // check if the recording status is active, if so push received delta(s) to the recordJSON
-      if (recordStatus === 1){        
-        for(i = 0; i < msg.data.length; i++){           
-          msg.data[i]["timestamp"] = Date.now()
-          recordJSON.deltas.push(msg.data[i])
-        }    
+      // if the got detected a malformed delta, it will be reported as an object in an array after the graph
+      if (attempt[1]){
+        console.log(attempt[1])
+        let quote = quotes.sort(function() {return 0.5 - Math.random()})[0]
+        // report malformed delta to client, with humour...
+        let clientMsg = JSON.stringify({
+          cmd: 'nuclearOption',
+          data: attempt[1],
+          quote: quote
+        })
+
+        deltaWebsocket.send(clientMsg)
+        // then disconnect, forcing it to wipe its scene and rejoin
+        deltaWebsocket.close()
+
+        return
+      } else {
+        // got detected no malformed deltas!
+
+        // store current session to the sessionFile
+        storeSession()
+        let response = {
+          cmd: "deltas",
+          date: Date.now(),
+          data: msg.data
+        };
+        // check if the recording status is active, if so push received delta(s) to the recordJSON
+        if (recordStatus === 1){        
+          for(i = 0; i < msg.data.length; i++){           
+            msg.data[i]["timestamp"] = Date.now()
+            recordJSON.deltas.push(msg.data[i])
+          }    
+        }
+        send_to_other_clients(JSON.stringify(response), deltaWebsocket)
       }
-      send_to_other_clients(JSON.stringify(response), deltaWebsocket)
     } 
     break;
 
