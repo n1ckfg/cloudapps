@@ -151,7 +151,7 @@ function handlemessage(msg, deltaWebsocket) {
       // synchronize our local copy:
       try {
 
-        attempt = got.applyDeltasToGraph(localGraph, deltaMsg.data);
+        attempt = got.applyDeltasToGraph(localGraph, msg.data);
 
         
       } catch (e) {
