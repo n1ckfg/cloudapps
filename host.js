@@ -11,6 +11,7 @@ const { argv } = require('yargs');
 let quotes = JSON.parse(fs.readFileSync('./strangelove.json'))
 
 
+
 // let sceneFiles = []
 // fs.readdirSync('./scenes').forEach(file => {
 //   sceneFiles.push(file)
@@ -38,6 +39,8 @@ setInterval(() => {
   });
 }, 20000);
 
+// the OT history for a given session:
+let history = []
 
 // a local copy of the current graph state, for synchronization purposes
 let localGraph = {
@@ -168,7 +171,7 @@ function handlemessage(msg, deltaWebsocket) {
       } catch (e) {
         console.warn(e);
       }
-      // if the got detected a malformed delta, it will be reported as an object in an array after the graph
+      // if the got detected a malformed delta (or a conflict delta for which we do not have a merge strategy), it will be reported as an object in an array after the graph
       if (attempt[1]){
         console.log(attempt[1])
         let quote = quotes.sort(function() {return 0.5 - Math.random()})[0]
