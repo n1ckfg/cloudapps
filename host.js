@@ -173,20 +173,53 @@ function handlemessage(msg, deltaWebsocket) {
         //
       }
       // if the got detected a malformed delta (or a conflict delta for which we do not have a merge strategy), it will be reported as an object in an array after the graph
-      if (attempt.length > 1 && attempt[1]){
-        console.log(attempt[1])
-        let quote = quotes.sort(function() {return 0.5 - Math.random()})[0]
-        // report malformed delta to client, with humour...
-        let clientMsg = JSON.stringify({
-          cmd: 'nuclearOption',
-          data: attempt[1],
-          quote: quote
-        })
+      if (attempt && attempt.length > 1 && attempt[1]){
 
-        deltaWebsocket.send(clientMsg)
-        // then disconnect, forcing it to wipe its scene and rejoin
-        deltaWebsocket.close()
 
+        switch(attempt[1].type){
+          case "conflictDelta":
+          // for now, a conflict delta will still be passed through, just so we can test and capture when they occur
+          // feedback path stuff
+          for(i=0;i<deltaMsg.data.length; i++){
+            // if a connection delta, check if history node is needed: 
+            if(deltaMsg.data[i].op === 'connect'){
+              console.log(deltaMsg.data[i])
+              let historyDelta = getHistoryPropchanges(deltaMsg.data[i])
+              let msg = JSON.stringify({
+                cmd: 'deltas',
+                date: Date.now(),
+                data: historyDelta
+              })
+              send_to_other_clients(msg)
+              
+            }
+            else {
+              let msg = JSON.stringify({
+                cmd: 'deltas',
+                date: Date.now(),
+                data: deltaMsg.data
+              })
+              
+              send_to_other_clients(msg)
+              
+              
+            }
+          }
+          break
+          case "malformedDelta":
+            let quote = quotes.sort(function() {return 0.5 - Math.random()})[0]
+            // report malformed delta to client, with humour...
+            let clientMsg = JSON.stringify({
+              cmd: 'nuclearOption',
+              data: attempt[1],
+              quote: quote
+            })
+            deltaWebsocket.send(clientMsg)
+            // then disconnect, forcing it to wipe its scene and rejoin
+            deltaWebsocket.close()
+          break
+
+        }
         return
       } else {
         // got detected no malformed deltas!
