@@ -174,7 +174,7 @@ function handlemessage(msg, deltaWebsocket) {
       }
       // if the got detected a malformed delta (or a conflict delta for which we do not have a merge strategy), it will be reported as an object in an array after the graph
       if (attempt && attempt.length > 1 && attempt[1]){
-        //
+        
 
         switch(attempt[1].type){
           case "conflictDelta":
