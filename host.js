@@ -6,8 +6,7 @@ const fs = require('fs')
 let listenPort = (process.env.PORT || 8081)
 const deltaWebsocketServer = new WebSocket.Server({ 'port': listenPort, clientTracking: true });
 
-const got = require("./gotlib/got.js")
-const { argv } = require('yargs');
+const got = require("gotlib")
 let quotes = JSON.parse(fs.readFileSync('./strangelove.json'))
 
 
