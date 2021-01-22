@@ -11,8 +11,7 @@ After creating a new branch, you need to switch to it, then:
 
 Then, to push from a branch to its corresponding heroku app repo, use
 ```git push heroku <branchname>:master```
-i.e.
-```git push heroku mischmasch-userdata:master```
+
 
 # branches/apps
 
